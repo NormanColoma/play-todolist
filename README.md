@@ -1,5 +1,7 @@
-# Play Todolist 
+# Play TodoList
 
-Una app de prueba.
+Una app para la asignatura MADS
 
-Pendiente subido a Heroku.
+## Heroku
+
+Puedes probar el despliegue en Heroku pulsando en [este enlace](http://intense-sierra-6380.herokuapp.com/).

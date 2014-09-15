@@ -12,15 +12,13 @@ object Application extends Controller {
     Redirect(routes.Application.tasks)
   }
 
-  def tasks = Action {
-  	Ok(views.html.index(Task.all(), taskForm))
-  }
-
   val taskForm = Form(
   	"label" -> nonEmptyText
   )
 
-  def tasks = TODO
+  def tasks = Action {
+  	Ok(views.html.index(Task.all(), taskForm))
+  }
 
   def newTask = TODO
 

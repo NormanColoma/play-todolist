@@ -3,8 +3,12 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
+import play.api.libs.json._
+import play.api.libs.functional.syntax._
 
 case class Task(id: Long, label: String)
+
+
 
 object Task {
 
@@ -14,9 +18,13 @@ object Task {
          case id~label => Task(id, label)
       }
    }
- 
+
    def all(): List[Task] = DB.withConnection { implicit c =>
      SQL("select * from task").as(task *)
+   }
+
+   def getTask(id: Long): Task = DB.withConnection { implicit c =>
+     SQL("select * from task where id = {id}").on('id -> id).as(task.single)
    }
 
    def create(label: String) {
@@ -26,20 +34,13 @@ object Task {
        ).executeUpdate()
      }
    }  
-
-   def getTask(id:Long){
-      DB.withConnection { implicit c =>
-         SQL("select * from task where id = {id}").on(
-           'id -> id
-         ).execute()
-       }
-   } 
-
-   def delete(id: Long) {
-     DB.withConnection { implicit c =>
+   
+   def delete(id: Long): Int = {
+     val result: Int = DB.withConnection { implicit c =>
        SQL("delete from task where id = {id}").on(
          'id -> id
        ).executeUpdate()
      }
+     result
    }
 }

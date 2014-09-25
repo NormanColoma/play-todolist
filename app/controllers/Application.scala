@@ -17,12 +17,12 @@ object Application extends Controller {
   )(unlift(Task.unapply))
 
   implicit val taskReads: Reads[Task] = (
-  (JsPath \ "id").read[Long] and
-  (JsPath \ "label").read[String]
-)(Task.apply _)
+    (JsPath \ "id").read[Long] and
+    (JsPath \ "label").read[String]
+  )(Task.apply _)
 
   def index = Action {
-    Redirect(routes.Application.tasks)
+    Ok(views.html.index(Task.all(), taskForm))
   }
 
   val taskForm = Form(
@@ -30,7 +30,7 @@ object Application extends Controller {
   )
 
   def tasks = Action {
-     Ok(views.html.index(Task.all(), taskForm))
+     Ok(Json.toJson(Task.all()))
   }
 
   def getTask(id: Long) = Action{
@@ -38,7 +38,7 @@ object Application extends Controller {
    try {
     Ok(Json.toJson(Task.getTask(id)))
    }catch{
-    case e: Exception => NotFound("The task have not been found")
+    case e: Exception => NotFound("The task has not been found")
    }
     
   }
@@ -48,7 +48,7 @@ object Application extends Controller {
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label => {
         Task.create(label)
-        Ok(Json.toJson(label))
+        Created((Json.toJson(label)))
       }
     )
   }

@@ -3,19 +3,17 @@ import play.api.db._
 import play.api.Play.current
 import anorm._
 import anorm.SqlParser._
-import play.api.libs.json._
-import play.api.libs.functional.syntax._
 
-case class Task(id: Long, label: String)
+case class Task(id: Long, label: String, t_user: String)
 
 
 
 object Task {
-
    val task = {
       get[Long]("id") ~ 
-      get[String]("label") map {
-         case id~label => Task(id, label)
+      get[String]("label") ~
+      get[String]("t_user") map {
+         case id~label~t_user => Task(id, label, t_user)
       }
    }
 
@@ -25,6 +23,14 @@ object Task {
 
    def getTask(id: Long): Task = DB.withConnection { implicit c =>
      SQL("select * from task where id = {id}").on('id -> id).as(task.single)
+   }
+
+   def existUser(name:String): String = DB.withConnection{ implicit c => 
+      SQL("select name from task_user where name = {name}").on('name -> name).as(scalar[String].single)
+   }
+
+   def getTaskByName(t_user: String): List[Task] = DB.withConnection { implicit c => 
+      SQL("select id,label,t_user from task where t_user = {t_user}").on('t_user -> t_user).as(task *)
    }
 
    def create(label: String) {

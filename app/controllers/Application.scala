@@ -11,15 +11,14 @@ import play.api.libs.functional.syntax._
 
 object Application extends Controller {
 
-  implicit val taskWrites: Writes[Task] = (
-    (JsPath \ "id").write[Long] and
-    (JsPath \ "label").write[String]
-  )(unlift(Task.unapply))
 
-  implicit val taskReads: Reads[Task] = (
-    (JsPath \ "id").read[Long] and
-    (JsPath \ "label").read[String]
-  )(Task.apply _)
+
+
+implicit val taskWrites: Writes[Task] = (
+  (JsPath \ "id").write[Long] and
+  (JsPath \ "label").write[String] and
+  (JsPath \ "t_user").write[String]
+)(unlift(Task.unapply))
 
   def index = Action {
     Ok(views.html.index(Task.all(), taskForm))
@@ -33,13 +32,27 @@ object Application extends Controller {
      Ok(Json.toJson(Task.all()))
   }
 
+
+
   def getTask(id: Long) = Action{
    
    try {
     Ok(Json.toJson(Task.getTask(id)))
    }catch{
-    case e: Exception => NotFound("The task has not been found")
+    case e: Exception => NotFound("Task has not been found")
    }
+    
+  }
+
+  def getTaskByUser(user: String) = Action{
+    try{
+      if(Task.existUser(user) == user)
+        Ok(Json.toJson(Task.getTaskByName(user)))
+      else
+        NotFound("User "+user+" doesn't exist")
+    }catch{
+      case e: Exception => NotFound("User "+user+" doesn't exist")
+    }
     
   }
 

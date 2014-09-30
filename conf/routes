@@ -11,4 +11,5 @@ GET     /tasks controllers.Application.tasks
 GET	    /tasks/:id controllers.Application.getTask(id: Long)
 GET 	/:user/tasks controllers.Application.getTaskByUser(user: String)
 POST	/tasks controllers.Application.newTask
+POST	/:user/tasks controllers.Application.newTaskUser(user: String)
 DELETE	/tasks/:id controllers.Application.deleteTask(id: Long)

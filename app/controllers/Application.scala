@@ -66,6 +66,22 @@ implicit val taskWrites: Writes[Task] = (
     )
   }
 
+  def newTaskUser(user: String) = Action {
+    implicit request =>
+    taskForm.bindFromRequest.fold(
+      errors => BadRequest(views.html.index(Task.all(), errors)),
+      label => {
+        try{
+          Task.createWithUser(label,user)
+          Created((Json.toJson("Task: "+label+". Created by: "+user)))
+        }
+        catch{
+          case e: Exception => NotFound("User "+user+" doesn't exist")
+        }
+      }
+    )
+  }
+
   def deleteTask(id: Long) = Action {
     if(Task.delete(id) > 0)
       Ok("Task has been deleted")

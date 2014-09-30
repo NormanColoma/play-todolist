@@ -40,6 +40,14 @@ object Task {
        ).executeUpdate()
      }
    }  
+
+   def createWithUser(label: String, t_user: String){
+    DB.withConnection { implicit c =>
+       SQL("insert into task (label,t_user) values ({label},{t_user})").on(
+         'label -> label, 't_user -> t_user
+       ).executeUpdate()
+     }
+   }
    
    def delete(id: Long): Int = {
      val result: Int = DB.withConnection { implicit c =>

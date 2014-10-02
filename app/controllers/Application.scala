@@ -28,27 +28,28 @@ implicit val taskWrites: Writes[Task] = (
     "label" -> nonEmptyText
   )
 
-  def tasks = Action {
+  def tasks = Action {   
      Ok(Json.toJson(Task.all()))
   }
 
 
 
   def getTask(id: Long) = Action{
-   
-   try {
-    Ok(Json.toJson(Task.getTask(id)))
-   }catch{
-    case e: Exception => NotFound("Task has not been found")
-   }
     
+    val json= Task.getTask(id)
+    if(json == None)
+      NotFound("Task has not been found")
+    else
+      Ok(Json.toJson(json))
   }
 
   def getTaskByUser(user: String) = Action{
     try{
-      if(Task.existUser(user) == user)
+      if(Task.existUser(user) == user){
         Ok(Json.toJson(Task.getTaskByName(user)))
+      }
       else
+
         NotFound("User "+user+" doesn't exist")
     }catch{
       case e: Exception => NotFound("User "+user+" doesn't exist")

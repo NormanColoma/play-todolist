@@ -21,12 +21,12 @@ object Task {
      SQL("select * from task").as(task *)
    }
 
-   def getTask(id: Long): Task = DB.withConnection { implicit c =>
-     SQL("select * from task where id = {id}").on('id -> id).as(task.single)
+   def getTask(id: Long): Option[Task] = DB.withConnection { implicit c =>
+     SQL("select * from task where id = {id}").on('id -> id).as(task.singleOpt)
    }
 
    def existUser(name:String): String = DB.withConnection{ implicit c => 
-      SQL("select name from task_user where name = {name}").on('name -> name).as(scalar[String].single)
+      SQL("select name from task_user where name = {name}").on('name -> name).as(scalar[String].singleOpt)
    }
 
    def getTaskByName(t_user: String): List[Task] = DB.withConnection { implicit c => 

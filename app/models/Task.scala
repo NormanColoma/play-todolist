@@ -18,7 +18,7 @@ object Task {
    }
 
    def all(): List[Task] = DB.withConnection { implicit c =>
-     SQL("select * from task").as(task *)
+     SQL("select * from task where t_user ={t_user}").on('t_user->"anonimo").as(task *)
    }
 
    def getTask(id: Long): Option[Task] = DB.withConnection { implicit c =>

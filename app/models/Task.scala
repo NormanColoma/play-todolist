@@ -25,7 +25,7 @@ object Task {
      SQL("select * from task where id = {id}").on('id -> id).as(task.singleOpt)
    }
 
-   def existUser(name:String): String = DB.withConnection{ implicit c => 
+   def existUser(name:String): Option[String] = DB.withConnection{ implicit c => 
       SQL("select name from task_user where name = {name}").on('name -> name).as(scalar[String].singleOpt)
    }
 
@@ -41,8 +41,7 @@ object Task {
      }
    }  
 
-   def createWithUser(label: String, t_user: String){
-    DB.withConnection { implicit c =>
+   def createWithUser(label: String, t_user: String){ DB.withConnection { implicit c =>
        SQL("insert into task (label,t_user) values ({label},{t_user})").on(
          'label -> label, 't_user -> t_user
        ).executeUpdate()

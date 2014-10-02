@@ -44,17 +44,16 @@ implicit val taskWrites: Writes[Task] = (
   }
 
   def getTaskByUser(user: String) = Action{
-    try{
-      if(Task.existUser(user) == user){
+    val t_user = Task.existUser(user)
+    if(t_user != None){
+      if(t_user.getOrElse(user) == user)
         Ok(Json.toJson(Task.getTaskByName(user)))
-      }
       else
-
         NotFound("User "+user+" doesn't exist")
-    }catch{
-      case e: Exception => NotFound("User "+user+" doesn't exist")
+
     }
-    
+    else 
+      NotFound("User "+user+" doesn't exist")
   }
 
   def newTask = Action { implicit request =>
@@ -72,13 +71,11 @@ implicit val taskWrites: Writes[Task] = (
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label => {
-        try{
-          Task.createWithUser(label,user)
+       val t_user = Task.existUser(user)
+        if(t_user != None)
           Created((Json.toJson("Task: "+label+". Created by: "+user)))
-        }
-        catch{
-          case e: Exception => NotFound("User "+user+" doesn't exist")
-        }
+        else
+          NotFound("User "+user+" doesn't exist")
       }
     )
   }

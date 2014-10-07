@@ -16,8 +16,9 @@ object Application extends Controller {
 
 implicit val taskWrites: Writes[Task] = (
   (JsPath \ "id").write[Long] and
-  (JsPath \ "label").write[String] and
-  (JsPath \ "t_user").write[String]
+  (JsPath \ "label").write[String] and 
+  (JsPath \ "t_user").write[String] and 
+  (JsPath \ "t_date").write[Option[String]]
 )(unlift(Task.unapply))
 
   def index = Action {

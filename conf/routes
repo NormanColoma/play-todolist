@@ -10,6 +10,8 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 GET     /tasks controllers.Application.tasks
 GET	    /tasks/:id controllers.Application.getTask(id: Long)
 GET 	/:user/tasks controllers.Application.getTaskByUser(user: String)
+GET 	/tasks/:id/date controllers.Application.getDate(id:Long)
+POST		/tasks/:id/date controllers.Application.setEndDate(id:Long)
 POST	/tasks controllers.Application.newTask
 POST	/:user/tasks controllers.Application.newTaskUser(user: String)
 DELETE	/tasks/:id controllers.Application.deleteTask(id: Long)

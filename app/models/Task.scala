@@ -37,7 +37,7 @@ object Task {
    }
 
    def getTaskByName(t_user: String): List[Task] = DB.withConnection { implicit c => 
-      SQL("select id,label,t_user from task where t_user = {t_user}").on('t_user -> t_user).as(task *)
+      SQL("select * from task where t_user = {t_user}").on('t_user -> t_user).as(task *)
    }
 
    def setDate(t_date:String, id:Long): Int = {

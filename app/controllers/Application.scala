@@ -7,6 +7,9 @@ import play.api.data.Forms._
 import models.Task
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import java.util.Date
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 
 
 object Application extends Controller {
@@ -14,12 +17,14 @@ object Application extends Controller {
 
 
 
-implicit val taskWrites: Writes[Task] = (
-  (JsPath \ "id").write[Long] and
-  (JsPath \ "label").write[String] and 
-  (JsPath \ "t_user").write[String] and 
-  (JsPath \ "t_date").write[Option[String]]
-)(unlift(Task.unapply))
+  implicit val taskWrites: Writes[Task] = (
+    (JsPath \ "id").write[Long] and
+    (JsPath \ "label").write[String] and 
+    (JsPath \ "t_user").write[String] and 
+    (JsPath \ "t_date").write[Option[String]]
+  )(unlift(Task.unapply))
+
+
 
   def index = Action {
     Ok(views.html.index(Task.all(), taskForm))
@@ -33,6 +38,27 @@ implicit val taskWrites: Writes[Task] = (
      Ok(Json.toJson(Task.all()))
   }
 
+  def getDate(id:Long) = Action{
+    val task= Task.getTask(id)
+    if(task != None){
+      val date = Task.getDate(id)
+      Ok(date)
+    }
+    else
+      NotFound("Task has not been found")
+  }
+
+  def setEndDate(id:Long) = Action{ implicit request =>
+    taskForm.bindFromRequest.fold(
+      errors => BadRequest(views.html.index(Task.all(), errors)),
+      label=> {
+        if(Task.setDate(label, id) > 0)
+          Ok("Date has been updated")
+        else 
+          NotFound("Task has not been")
+      }
+    )
+  }
 
 
   def getTask(id: Long) = Action{

@@ -1,6 +1,6 @@
  # --- !Ups
 
-ALTER TABLE task ADD t_date date;
+ALTER TABLE task ADD t_date varchar(10);
 
 # --- !Downs
 

@@ -42,7 +42,10 @@ object Application extends Controller {
     val task= Task.getTask(id)
     if(task != None){
       val date = Task.getDate(id)
-      Ok(date)
+      date match{
+        case Some(s) => Ok(s)
+        case None => NotFound("Task has not date")
+      }
     }
     else
       NotFound("Task has not been found")

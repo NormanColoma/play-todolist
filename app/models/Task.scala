@@ -27,8 +27,8 @@ object Task {
      SQL("select * from task where id = {id}").on('id -> id).as(task.singleOpt)
    }
 
-   def getDate(id: Long): String = DB.withConnection { implicit c =>
-     SQL("select t_date from task where id = {id}").on('id -> id).as(scalar[String].single)
+   def getDate(id: Long): Option[String] = DB.withConnection { implicit c =>
+     SQL("select t_date from task where id = {id} and t_date is not null").on('id -> id).as(scalar[String].singleOpt)
    }
 
 

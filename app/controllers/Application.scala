@@ -23,7 +23,7 @@ object Application extends Controller {
     (JsPath \ "t_user").write[String] and 
     (JsPath \ "t_date").write[String].contramap[Option[Date]](dt => 
       if(dt == None)
-        "None"
+        "None yet"
       else 
         formatter.format(dt.getOrElse(""))
     )

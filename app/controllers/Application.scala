@@ -21,10 +21,8 @@ object Application extends Controller {
     (JsPath \ "id").write[Long] and
     (JsPath \ "label").write[String] and 
     (JsPath \ "t_user").write[String] and 
-    (JsPath \ "t_date").write[Option[String]]
+    (JsPath \ "t_date").write[Option[Date]]
   )(unlift(Task.unapply))
-
-
 
   def index = Action {
     Ok(views.html.index(Task.all(), taskForm))
@@ -42,10 +40,11 @@ object Application extends Controller {
     val task= Task.getTask(id)
     if(task != None){
       val date = Task.getDate(id)
+      val formatter:SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
       date match{
-        case Some(s) => Ok(s)
-        case None => NotFound("Task has not date")
-      }
+        case date => Ok(Json.toJson(formatter.format(date.getOrElse(""))))
+        case None => NotFound("Task has not been found")
+      } 
     }
     else
       NotFound("Task has not been found")
@@ -55,7 +54,9 @@ object Application extends Controller {
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label=> {
-        if(Task.setDate(label, id) > 0)
+        val formatter:SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
+        val date: Date = formatter.parse(label)
+        if(Task.setDate(date, id) > 0)
           Ok("Date has been updated")
         else 
           NotFound("Task has not been")

@@ -5,7 +5,7 @@ import anorm._
 import anorm.SqlParser._
 import java.util.Date
 
-case class Task(id: Long, label: String, t_user: String, t_date: Option[String])
+case class Task(id: Long, label: String, t_user: String, t_date: Option[Date])
 
 
 
@@ -14,7 +14,7 @@ object Task {
       get[Long]("id") ~ 
       get[String]("label") ~
       get[String]("t_user") ~
-      get[Option[String]]("t_date") map {
+      get[Option[Date]]("t_date") map {
          case id~label~t_user~t_date => Task(id, label, t_user, t_date)
       }
    }
@@ -27,8 +27,8 @@ object Task {
      SQL("select * from task where id = {id}").on('id -> id).as(task.singleOpt)
    }
 
-   def getDate(id: Long): Option[String] = DB.withConnection { implicit c =>
-     SQL("select t_date from task where id = {id} and t_date is not null").on('id -> id).as(scalar[String].singleOpt)
+   def getDate(id: Long): Option[Date] = DB.withConnection { implicit c =>
+     SQL("select t_date from task where id = {id} and t_date is not null").on('id -> id).as(scalar[Date].singleOpt)
    }
 
 
@@ -40,7 +40,7 @@ object Task {
       SQL("select * from task where t_user = {t_user}").on('t_user -> t_user).as(task *)
    }
 
-   def setDate(t_date:String, id:Long): Int = {
+   def setDate(t_date:Date, id:Long): Int = {
     val result: Int = DB.withConnection { implicit c =>
        SQL("update task set t_date = {t_date} where id ={id}").on(
          'id -> id, 't_date -> t_date

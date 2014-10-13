@@ -15,13 +15,18 @@ import java.text.SimpleDateFormat
 object Application extends Controller {
 
 
-
+  val formatter:SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
 
   implicit val taskWrites: Writes[Task] = (
     (JsPath \ "id").write[Long] and
     (JsPath \ "label").write[String] and 
     (JsPath \ "t_user").write[String] and 
-    (JsPath \ "t_date").write[Option[Date]]
+    (JsPath \ "t_date").write[String].contramap[Option[Date]](dt => 
+      if(dt == None)
+        "None"
+      else 
+        formatter.format(dt.getOrElse(""))
+    )
   )(unlift(Task.unapply))
 
   def index = Action {
@@ -40,7 +45,6 @@ object Application extends Controller {
     val task= Task.getTask(id)
     if(task != None){
       val date = Task.getDate(id)
-      val formatter:SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
       date match{
         case date => Ok(Json.toJson(formatter.format(date.getOrElse(""))))
         case None => NotFound("Task has not been found")
@@ -54,7 +58,6 @@ object Application extends Controller {
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label=> {
-        val formatter:SimpleDateFormat = new SimpleDateFormat("yyyy/MM/dd")
         val date: Date = formatter.parse(label)
         if(Task.setDate(date, id) > 0)
           Ok("Date has been updated")

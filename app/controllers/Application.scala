@@ -76,8 +76,13 @@ object Application extends Controller {
   def getTaskByUser(user: String) = Action{
     val t_user = Task.existUser(user)
     if(t_user != None){
-      if(t_user.getOrElse(user) == user)
-        Ok(Json.toJson(Task.getTaskByName(user)))
+      if(t_user.getOrElse(user) == user){
+        val json = Task.getTaskByName(user)
+        if(json.isEmpty)
+          NotFound("User "+user+" doesn't have any task yet")
+        else 
+          Ok(Json.toJson(json))
+      }
       else
         NotFound("User "+user+" doesn't exist")
 

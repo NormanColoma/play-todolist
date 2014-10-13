@@ -45,10 +45,10 @@ object Application extends Controller {
     val task= Task.getTask(id)
     if(task != None){
       val date = Task.getDate(id)
-      date match{
-        case date => Ok(Json.toJson(formatter.format(date.getOrElse(""))))
-        case None => NotFound("Task has not been found")
-      } 
+      if(date != None)
+        Ok(Json.toJson(formatter.format(date.getOrElse(""))))
+      else
+        NotFound("Task has not been found")
     }
     else
       NotFound("Task has not been found")

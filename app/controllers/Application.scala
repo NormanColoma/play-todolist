@@ -21,7 +21,12 @@ object Application extends Controller {
     (JsPath \ "id").write[Long] and
     (JsPath \ "label").write[String] and 
     (JsPath \ "t_user").write[String] and 
-    (JsPath \ "t_date").write[Option[Date]]
+    (JsPath \ "t_date").write[String].contramap[Option[Date]](dt => 
+    if(dt == None)
+      "None"
+    else
+      formatter.format(dt.getOrElse(""))
+    )
   )(unlift(Task.unapply))
 
   def index = Action {

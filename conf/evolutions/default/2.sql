@@ -16,4 +16,3 @@ INSERT INTO task_user (name) values('norman');
 
 DELETE FROM task_user;
 ALTER TABLE task DROP t_user;
-DROP TABLE task_user;

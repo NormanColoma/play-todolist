@@ -21,7 +21,12 @@ object Application extends Controller {
     (JsPath \ "id").write[Long] and
     (JsPath \ "label").write[String] and 
     (JsPath \ "t_user").write[String] and 
-    (JsPath \ "t_date").write[Option[String]]
+    (JsPath \ "t_date").write[String].contramap[Option[Date]](dt => 
+    if(dt == None)
+      "None"
+    else
+      formatter.format(dt.getOrElse(""))
+    )
   )(unlift(Task.unapply))
 
   def index = Action {
@@ -41,7 +46,7 @@ object Application extends Controller {
     if(task != None){
       val date = Task.getDate(id)
       if(date != None)
-        Ok(Json.toJson(date.getOrElse("")))
+        Ok(Json.toJson(formatter.format(date.getOrElse(""))))
       else
         NotFound("Task has not been found")
     }
@@ -53,7 +58,8 @@ object Application extends Controller {
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label=> {
-        if(Task.setDate(label, id) > 0)
+        val date: Date = formatter.parse(label)
+        if(Task.setDate(date, id) > 0)
           Ok("Date has been updated")
         else 
           NotFound("Task has not been")

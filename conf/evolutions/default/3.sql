@@ -6,3 +6,4 @@ ALTER TABLE task ADD t_date timestamp;
 
 DELETE FROM task_user;
 ALTER TABLE task DROP t_date;
+DROP TABLE task_user;

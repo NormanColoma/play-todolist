@@ -48,7 +48,7 @@ object Application extends Controller {
       if(date != None)
         Ok(Json.toJson(formatter.format(date.getOrElse(""))))
       else
-        NotFound("Task has not been found")
+        NotFound("Task doesn't have date yet")
     }
     else
       NotFound("Task has not been found")

@@ -1,12 +1,13 @@
  # --- !Ups
 CREATE TABLE category (
+	id integer NOT NULL DEFAULT nextval('task_id_seq'),
     name varchar(50) NOT NULL, 
-    PRIMARY KEY(name)
+    PRIMARY KEY(id)
 );
 
-ALTER TABLE t_user ADD n_category varchar(50);
-ALTER TABLE t_user ADD CONSTRAINT fk_tuser_category FOREIGN KEY(n_category) REFERENCES category(name);
+ALTER TABLE category ADD t_user varchar(50);
+ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(t_user) REFERENCES task_user(name);
 
 # --- !Downs
-ALTER TABLE t_user DROP n_category;
+ALTER TABLE category DROP t_user;
 DROP TABLE  IF EXISTS category;

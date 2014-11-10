@@ -5,7 +5,6 @@ import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
 import models.Task
-import models.Category
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import java.util.Date
@@ -101,16 +100,6 @@ object Application extends Controller {
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label => {
         Task.create(label)
-        Created((Json.toJson(label)))
-      }
-    )
-  }
-
-  def newCategory(user:String) = Action { implicit request =>
-    taskForm.bindFromRequest.fold(
-      errors => BadRequest(views.html.index(Task.all(), errors)),
-      label => {
-        Category.newCategory(label)
         Created((Json.toJson(label)))
       }
     )

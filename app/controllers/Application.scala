@@ -62,7 +62,7 @@ object Application extends Controller {
         if(Task.setDate(date, id) > 0)
           Ok("Date has been updated")
         else 
-          NotFound("Task has not been")
+          NotFound("Task has not been found")
       }
     )
   }

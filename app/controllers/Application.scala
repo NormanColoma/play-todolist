@@ -111,8 +111,10 @@ object Application extends Controller {
       errors => BadRequest(views.html.index(Task.all(), errors)),
       label => {
        val t_user = Task.existUser(user)
-        if(t_user != None)
+        if(t_user != None){
+          Task.createWithUser(label,user)
           Created((Json.toJson("Task: "+label+". Created by: "+user)))
+        }
         else
           NotFound("User "+user+" doesn't exist")
       }

@@ -118,6 +118,31 @@ object Application extends Controller {
       NotFound("User "+user+" doesn't exist")
   }
 
+  def getTaskByCategory(id_Cat:Long, user: String) = Action{
+    val t_user = Task.existUser(user)
+    if(t_user != None){
+      if(t_user.getOrElse(user) == user){
+        if(Category.getCategory(id_Cat) != None){
+          val json= Category.getTasks(id_Cat, user)
+          if(json.length > 0){
+            Ok(Json.toJson(json))
+          }
+          else{
+            NotFound("User "+user+" doesn't have any task in this category yet")
+          } 
+          
+        }
+        else 
+          NotFound("Category has not been found")
+      }
+      else
+        NotFound("User "+user+" doesn't exist")
+
+    }
+    else 
+      NotFound("User "+user+" doesn't exist")
+  }
+
   def newTask = Action { implicit request =>
     taskForm.bindFromRequest.fold(
       errors => BadRequest(views.html.index(Task.all(), errors)),

@@ -109,13 +109,40 @@ class ApplicationTaskF4 extends Specification {
 		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
 		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
 		  		controllers.Application.addTask(1,1,"norman")(FakeRequest(POST, "/norman/category/1/1"))
-		  		controllers.Application.addTask(2,1,"norman")(FakeRequest(POST, "/norman/category/1/1"))
-		  		var result = controllers.Application.newTaskUser("norman")(FakeRequest(GET, "/norman/1/tasks"))
+		  		controllers.Application.addTask(2,1,"norman")(FakeRequest(POST, "/norman/category/1/2"))
+		  		var result = controllers.Application.getTaskByCategory(1,"norman")(FakeRequest(GET, "/norman/1/tasks"))
 		  		status(result) must equalTo(OK)
 		        contentType(result) must beSome("application/json")
 		  		contentAsString(result) must contain("""[{"id":1,"label":"Football","t_user":"norman","""
           +""""t_date":"None"},{"id":2,"label":"Basket","t_user":"norman","""
           +""""t_date":"None"}]""")
+
+		  	}
+		}
+
+		"getting tasks from some category(that doesn't exist) of user" in {
+		  
+		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {		  		
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
+		  		var result = controllers.Application.getTaskByCategory(1,"norman")(FakeRequest(GET, "/norman/1/tasks"))
+		  		status(result) must equalTo(NOT_FOUND)
+		        contentType(result) must beSome("text/plain")
+		  		contentAsString(result) must contain("Category has not been found")
+
+		  	}
+		}
+
+		"getting tasks from some category(that doesn't have any task yet) of user" in {
+		  
+		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {		  		
+		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Sports"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
+		  		var result = controllers.Application.getTaskByCategory(1,"norman")(FakeRequest(GET, "/norman/1/tasks"))
+		  		status(result) must equalTo(NOT_FOUND)
+		        contentType(result) must beSome("text/plain")
+		  		contentAsString(result) must contain("User norman doesn't have any task in this category yet")
 
 		  	}
 		}

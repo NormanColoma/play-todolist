@@ -15,4 +15,13 @@ object Category {
       get[String]("label") ~
       get[String]("t_user")
    }
+
+   def newCategory(name: String, t_user:String):Int {
+     val result: Int= DB.withConnection { implicit c =>
+       SQL("insert into category (name,t_user) values ({name, t_user})").on(
+         'name -> name, 't_user -> t_user
+       ).executeUpdate()
+     }
+     result
+   }
 }

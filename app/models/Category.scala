@@ -39,4 +39,14 @@ object Category {
    def getCategories(user:String):List[Category] =  DB.withConnection { implicit c =>
    	SQL("select * from category where user = {user}").on('user -> user).as(category *)
    }
+
+   def modify(id_task: Long, id_category:Long):Int = {
+     val result: Int= DB.withConnection { implicit c =>
+        SQL("update tcat set id_category = {id_category} where id_task ={id_task}").on(
+         'id_task -> id_task, 'id_category -> id_category
+       ).executeUpdate()
+     }
+     result
+   }
+
 }

@@ -160,6 +160,16 @@ object Application extends Controller {
     )
   }
 
+  def addTask(id_t:Long, cat:Long, user:String) = Action {
+    val t_user = Task.existUser(user)
+    if(t_user != None){
+          Category.addTask(id_t,cat,user)
+          Created((Json.toJson("Task was added successfully")))
+    }
+    else
+      NotFound("User "+user+" doesn't exist")
+  }
+
   def deleteTask(id: Long) = Action {
     if(Task.delete(id) > 0)
       Ok("Task has been deleted")

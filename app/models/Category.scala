@@ -13,7 +13,9 @@ object Category {
 	val category = {
       get[Long]("id") ~ 
       get[String]("name") ~
-      get[String]("user")
+      get[String]("user") map {
+         case id~name~user=> Category(id, name, user)
+      }
    }
 
    def newCategory(name: String, user:String):Int = {
@@ -23,5 +25,9 @@ object Category {
        ).executeUpdate()
      }
      result
+   }
+
+   def getCategories(user:String):List[Category] =  DB.withConnection { implicit c =>
+   	SQL("select * from category where user = {user}").on('user -> user).as(category *)
    }
 }

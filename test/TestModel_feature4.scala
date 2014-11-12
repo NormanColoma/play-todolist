@@ -30,8 +30,10 @@ class ModelTaskF4 extends Specification {
 		    	Category.newCategory("Videos","norman") //User that exists
 		    	val categories = Category.getCategories("norman")
 		    	categories.length mustEqual 2 
+		    	categories(0).id mustEqual 1
 		    	categories(0).name must equalTo("Sports")
 		    	categories(1).name must equalTo("Videos")
+		    	categories(1).id mustEqual 2
 		    }
 		}
 	}

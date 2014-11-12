@@ -5,11 +5,7 @@ CREATE TABLE category (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE task_category{
-	id_task integer, 
-	id_category integer, 
-	PRIMARY KEY(id_task, id_category)
-}
+
 
 ALTER TABLE category ADD t_user varchar(50);
 ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(t_user) REFERENCES task_user(name);

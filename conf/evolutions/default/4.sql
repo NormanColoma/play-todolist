@@ -5,6 +5,12 @@ CREATE TABLE category (
     PRIMARY KEY(id)
 );
 
+CREATE TABLE tcat(
+	id_task integer NOT NULL, 
+	id_category integer NOT NULL, 
+	PRIMARY KEY(id_task,id_category)
+);
+
 
 
 ALTER TABLE category ADD t_user varchar(50);

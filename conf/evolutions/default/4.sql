@@ -13,10 +13,10 @@ CREATE TABLE tcat(
 
 
 
-ALTER TABLE category ADD t_user varchar(50);
-ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(t_user) REFERENCES task_user(name);
+ALTER TABLE category ADD user varchar(50);
+ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(user) REFERENCES task_user(name);
 
 # --- !Downs
-ALTER TABLE category DROP t_user;
+ALTER TABLE category DROP user;
 DROP TABLE  IF EXISTS category;
 DROP TABLE  IF EXISTS tcat;

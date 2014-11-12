@@ -87,6 +87,16 @@ class ModelTaskF4 extends Specification {
 				Task.createWithUser("Baskteball", "norman")
 				Task.createWithUser("Tennis", "norman")
 				val list_task = Category.getTasks(1,"norman")
+				list_task.length mustEqual 1 
+				list_task(0).id mustEqual 1 
+				list_task(0).t_user must equalTo("norman")
+				list_task(0).label must equalTo("Football")
+				list_task(1).id mustEqual 2 
+				list_task(1).t_user must equalTo("norman")
+				list_task(1).label must equalTo("Basketball")
+				list_task(2).id mustEqual 3 
+				list_task(2).t_user must equalTo("norman")
+				list_task(2).label must equalTo("Tennis")
 
 		    }
 		}

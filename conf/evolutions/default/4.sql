@@ -19,3 +19,4 @@ ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(t_user) REFERE
 # --- !Downs
 ALTER TABLE category DROP t_user;
 DROP TABLE  IF EXISTS category;
+DROP TABLE  IF EXISTS tcat;

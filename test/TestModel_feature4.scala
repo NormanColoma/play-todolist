@@ -68,5 +68,16 @@ class ModelTaskF4 extends Specification {
 
 		    }
 		}
+
+		"getting id of Category" in{
+			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+				Category.newCategory("Sports","norman")
+		    	var Some(result1) = Category.getID("Sports","norman")
+		    	result1 mustEqual 1
+		    	var result2:Option[Long] = Category.getID("Basketball","norman")
+		    	resutl2 must beNone
+
+		    }
+		}
 	}
 }

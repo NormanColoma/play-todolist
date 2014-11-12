@@ -40,6 +40,10 @@ object Category {
    	SQL("select * from category where user = {user}").on('user -> user).as(category *)
    }
 
+   def getID(name:String, user:String): Option[Long] = DB.withConnection{ implicit c => 
+      SQL("select id from category where name = {name} and user = {user}").on('name -> name, 'user -> user).as(scalar[Long].singleOpt)
+   }
+
 
    def modify(id_task:Long, label: String):Int = {
      val result: Int= DB.withConnection { implicit c =>

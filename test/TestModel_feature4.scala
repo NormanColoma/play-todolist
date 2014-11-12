@@ -75,7 +75,7 @@ class ModelTaskF4 extends Specification {
 		    	var Some(result1) = Category.getID("Sports","norman")
 		    	result1 mustEqual 1
 		    	var result2:Option[Long] = Category.getID("Basketball","norman")
-		    	resutl2 must beNone
+		    	result2 must beNone
 
 		    }
 		}

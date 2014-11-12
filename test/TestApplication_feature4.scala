@@ -52,6 +52,13 @@ class ApplicationTaskF4 extends Specification {
 		"users adding tasks to some category" in {
 		  
 		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Sports"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
+		  		val result = controllers.Application.addTask(1,"Sports","norman")(FakeRequest(POST, "/norman/category")
+		  		status(result) must equalTo(CREATED)
+		        contentType(result) must beSome("application/json")
+		       	contentAsString(result) must contain("Football added to category Sports")
 		
 		  	}
 		}

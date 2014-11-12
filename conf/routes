@@ -11,7 +11,12 @@ GET     /tasks controllers.Application.tasks
 GET	    /tasks/:id controllers.Application.getTask(id: Long)
 GET 	/:user/tasks controllers.Application.getTaskByUser(user: String)
 GET 	/tasks/:id/date controllers.Application.getDate(id:Long)
+GET 	/:user/:id/tasks controllers.Application.getTaskByCategory(id:Long, user:String)
+POST 	/:user/categories controllers.Application.getCategoriesByUser(user:String)
+POST 	/:user/category/:cat/:id controllers.Application.addTask(id:Long, cat:Long, user:String)
+POST 	/:user/category/:cat/modify/:id controllers.Application.changeTask(id:Long, cat:Long, user:String)
 POST		/tasks/:id/date controllers.Application.setEndDate(id:Long)
 POST	/tasks controllers.Application.newTask
 POST	/:user/tasks controllers.Application.newTaskUser(user: String)
+POST 	/:user/category controllers.Application.newCategory(user:String)
 DELETE	/tasks/:id controllers.Application.deleteTask(id: Long)

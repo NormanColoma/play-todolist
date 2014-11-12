@@ -27,12 +27,32 @@ class ApplicationTaskF4 extends Specification {
 		"getting categories of user" in {
 		  
 		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+		  		//User that exits and he already created categories
 		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Football"))
 		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Basketball"))
 		  		val result = controllers.Application.getCategoriesByUser("norman")(FakeRequest(GET, "/norman/categories"))
 		        status(result) must equalTo(OK)
 		        contentType(result) must beSome("application/json")
 		       	contentAsString(result) must contain("""[{"id":1,"name":"Football","user":"norman"},{"id":2,"name":"Basketball","user":"norman"}]""")
+
+		       	//User that doesn't exist 
+		       	val result1 = controllers.Application.getCategoriesByUser("pepe")(FakeRequest(GET, "/pepe/categories"))
+		        status(result1) must equalTo(NOT_FOUND)
+		        contentType(result1) must beSome("text/plain")
+		       	contentAsString(result1) must contain("User pepe doesn't exist")
+
+		       	//User that exist but he has not created categories yet
+		       	val result2 = controllers.Application.getCategoriesByUser("domingogallardo")(FakeRequest(GET, "/domingogallardo/categories"))
+		        status(result2) must equalTo(NOT_FOUND)
+		        contentType(result2) must beSome("text/plain")
+		       	contentAsString(result2) must contain("User domingogallardo doesn't have any category yet")
+		  	}
+		}
+
+		"users adding tasks to some category" in {
+		  
+		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+		
 		  	}
 		}
 	}

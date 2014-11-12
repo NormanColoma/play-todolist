@@ -11,6 +11,7 @@ GET     /tasks controllers.Application.tasks
 GET	    /tasks/:id controllers.Application.getTask(id: Long)
 GET 	/:user/tasks controllers.Application.getTaskByUser(user: String)
 GET 	/tasks/:id/date controllers.Application.getDate(id:Long)
+POST 	/:user/categories controllers.Application.getCategoriesByUser(user:String)
 POST		/tasks/:id/date controllers.Application.setEndDate(id:Long)
 POST	/tasks controllers.Application.newTask
 POST	/:user/tasks controllers.Application.newTaskUser(user: String)

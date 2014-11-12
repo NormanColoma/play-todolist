@@ -28,6 +28,11 @@ object Application extends Controller {
       formatter.format(dt.getOrElse(""))
     )
   )(unlift(Task.unapply))
+  implicit val categoryWrites: Writes[Category] = (
+    (JsPath \ "id").write[Long] and
+    (JsPath \ "name").write[String] and 
+    (JsPath \ "user").write[String]
+  )(unlift(Category.unapply))
 
   def index = Action {
     Ok(views.html.index(Task.all(), taskForm))
@@ -84,6 +89,24 @@ object Application extends Controller {
         val json = Task.getTaskByName(user)
         if(json.isEmpty)
           NotFound("User "+user+" doesn't have any task yet")
+        else 
+          Ok(Json.toJson(json))
+      }
+      else
+        NotFound("User "+user+" doesn't exist")
+
+    }
+    else 
+      NotFound("User "+user+" doesn't exist")
+  }
+
+   def getCategoriesByUser(user: String) = Action{
+    val t_user = Task.existUser(user)
+    if(t_user != None){
+      if(t_user.getOrElse(user) == user){
+        val json = Category.getCategories(user)
+        if(json.isEmpty)
+          NotFound("User "+user+" doesn't have any category yet")
         else 
           Ok(Json.toJson(json))
       }

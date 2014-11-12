@@ -29,10 +29,10 @@ class ApplicationTaskF4 extends Specification {
 		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Football"))
 		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Basketball"))
-		  		val result = controllers.Application.getCategories("norman")(FakeRequest(GET, "/norman/categories")
+		  		val result = controllers.Application.getCategoriesByUser("norman")(FakeRequest(GET, "/norman/categories"))
 		        status(result) must equalTo(OK)
 		        contentType(result) must beSome("application/json")
-		       	contentAsString(result) must contain("""[{"id":1,"label":"Football","user":"norman"},{"id":2,"name":"Basketball","user":"norman"}]""")
+		       	contentAsString(result) must contain("""[{"id":1,"name":"Football","user":"norman"},{"id":2,"name":"Basketball","user":"norman"}]""")
 		  	}
 		}
 	}

@@ -36,5 +36,18 @@ class ModelTaskF4 extends Specification {
 		    	categories(1).id mustEqual 2
 		    }
 		}
+
+		"adding tasks to category" in{
+			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+				Category.newCategory("Sports","norman")
+		    	Task.createWithUser("Football", "norman")
+		      	Task.createWithUser("Basketball", "norman")
+		    	val result1 = Category.addTask(1,1)
+		    	val result2 = Category.addTask(2,1)
+		    	result1 mustEqual 1 
+		    	result2 mustEqual 1
+		    }
+		}
 	}
 }

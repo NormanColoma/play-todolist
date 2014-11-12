@@ -83,11 +83,19 @@ class ModelTaskF4 extends Specification {
 		"getting tasks from categories of users" in{
 			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 				Category.newCategory("Sports","norman")
+				Category.newCategory("Sports","domingogallardo")
 				Task.createWithUser("Football", "norman")
-				Task.createWithUser("Baskteball", "norman")
+				Task.createWithUser("Basketball", "norman")
 				Task.createWithUser("Tennis", "norman")
+				Task.createWithUser("Hockey", "domingogallardo")
+				Task.createWithUser("Baseball", "domingogallardo")
+				Category.addTask(1,1, "norman")
+		    	Category.addTask(2,1, "norman")
+		    	Category.addTask(3,1, "norman")
+		    	Category.addTask(4,2, "domingogallardo")
+		    	Category.addTask(5,2, "domingogallardo")
 				val list_task = Category.getTasks(1,"norman")
-				list_task.length mustEqual 1 
+				list_task.length mustEqual 3 
 				list_task(0).id mustEqual 1 
 				list_task(0).t_user must equalTo("norman")
 				list_task(0).label must equalTo("Football")
@@ -97,7 +105,17 @@ class ModelTaskF4 extends Specification {
 				list_task(2).id mustEqual 3 
 				list_task(2).t_user must equalTo("norman")
 				list_task(2).label must equalTo("Tennis")
+				val list_task2 = Category.getTasks(2,"domingogallardo")
+				list_task2.length mustEqual 2 
+				list_task2(0).id mustEqual 4 
+				list_task2(0).t_user must equalTo("domingogallardo")
+				list_task2(0).label must equalTo("Hockey")
+				list_task2(1).id mustEqual 5
+				list_task2(1).t_user must equalTo("domingogallardo")
+				list_task2(1).label must equalTo("Baseball")
+
 
 		    }
 		}
+	}
 }

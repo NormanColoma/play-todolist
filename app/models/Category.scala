@@ -63,6 +63,9 @@ object Category {
      result
    }
 
-   def get
+   def getTasks(id_category:Long, user:String):List[Task] = DB.withConnection{ implicit c => 
+   	SQL("select * from task inner join tcat on id_task = id where id_category = {id_category} and user ={user}").on(
+   		'id_category -> id_category, 'user -> user).as(task *)
+   }
 
 }

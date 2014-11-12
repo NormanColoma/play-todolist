@@ -27,10 +27,10 @@ object Category {
      result
    }
 
-   def addTask(id_task: Long, id_category:Long):Int = {
+   def addTask(id_task: Long, id_category:Long, user:String):Int = {
      val result: Int= DB.withConnection { implicit c =>
-       SQL("insert into tcat (id_task,id_category) values ({id_task},{id_category})").on(
-         'id_task -> id_task, 'id_category -> id_category
+       SQL("insert into tcat (id_task,id_category,user) values ({id_task},{id_category},{user})").on(
+         'id_task -> id_task, 'id_category -> id_category, 'user -> user
        ).executeUpdate()
      }
      result

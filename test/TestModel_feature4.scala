@@ -36,8 +36,8 @@ class ModelTaskF4 extends Specification {
 				Category.newCategory("Sports","norman")
 		    	Task.createWithUser("Football", "norman")
 		      	Task.createWithUser("Basketball", "norman")
-		    	val result1 = Category.addTask(1,1)
-		    	val result2 = Category.addTask(2,1)
+		    	val result1 = Category.addTask(1,1, "norman")
+		    	val result2 = Category.addTask(2,1, "norman")
 		    	result1 mustEqual 1 
 		    	result2 mustEqual 1
 
@@ -51,8 +51,8 @@ class ModelTaskF4 extends Specification {
 				Category.newCategory("Videos","norman")
 				Category.newCategory("Sports","norman")
 				Task.createWithUser("Football", "norman")
-				var sameTask1 = Category.addTask(1,1)
-				var sameTask2 = Category.addTask(1,2)
+				var sameTask1 = Category.addTask(1,1,"norman")
+				var sameTask2 = Category.addTask(1,2, "norman")
 				sameTask1 mustEqual 1 
 				sameTask2 mustEqual 1
 

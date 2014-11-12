@@ -18,6 +18,8 @@ ALTER TABLE category ADD user varchar(50);
 ALTER TABLE category ADD CONSTRAINT fk_tuser_category FOREIGN KEY(user) REFERENCES task_user(name);
 ALTER TABLE tcat ADD CONSTRAINT fk_task_category FOREIGN KEY(id_task) REFERENCES task(id);
 ALTER TABLE tcat ADD CONSTRAINT fk_cat_category FOREIGN KEY(id_category) REFERENCES category(id);
+ALTER TABLE tcat ADD user varchar(50);
+ALTER TABLE tcat ADD CONSTRAINT fk_tcat_user FOREIGN KEY(user) REFERENCES task_user(name);
 
 
 # --- !Downs

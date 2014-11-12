@@ -160,11 +160,38 @@ object Application extends Controller {
     )
   }
 
+  def changeTask(id_t:Long, id_cat:Long, user: String) = Action {
+    implicit request =>
+    taskForm.bindFromRequest.fold(
+      errors => BadRequest(views.html.index(Task.all(), errors)),
+      label => {
+       val t_user = Task.existUser(user)
+        if(t_user != None){
+          if(Category.getCategory(id_cat) != None){
+            if(Task.getTask(id_t) != None){
+              Category.modify(id_t,user)
+              Created((Json.toJson("Category was changed successfully")))
+            }
+            else 
+              NotFound("Task has not been found")
+          }
+          else NotFound("Category has not been found")
+        }
+        else
+          NotFound("User "+user+" doesn't exist")
+      }
+    )
+  }
+
   def addTask(id_t:Long, cat:Long, user:String) = Action {
     val t_user = Task.existUser(user)
     if(t_user != None){
+      if(Task.getTask(id_t) != None){
           Category.addTask(id_t,cat,user)
           Created((Json.toJson("Task was added successfully")))
+      }
+      else 
+         NotFound("Task has not been found")
     }
     else
       NotFound("User "+user+" doesn't exist")

@@ -49,6 +49,13 @@ object Category {
    	SQL("select * from category where user = {user}").on('user -> user).as(category *)
    }
 
+
+   def getCategory(id:Long):Option[Category] =  DB.withConnection { implicit c =>
+   	SQL("select * from category where id = {id}").on('id -> id).as(category.singleOpt)
+   }
+
+
+
    def getID(name:String, user:String): Option[Long] = DB.withConnection{ implicit c => 
       SQL("select id from category where name = {name} and user = {user}").on('name -> name, 'user -> user).as(scalar[Long].singleOpt)
    }

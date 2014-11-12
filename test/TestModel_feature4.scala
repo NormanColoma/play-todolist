@@ -40,6 +40,7 @@ class ModelTaskF4 extends Specification {
 		"adding tasks to category" in{
 			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
 
+				//Adding task to category
 				Category.newCategory("Sports","norman")
 		    	Task.createWithUser("Football", "norman")
 		      	Task.createWithUser("Basketball", "norman")
@@ -47,6 +48,27 @@ class ModelTaskF4 extends Specification {
 		    	val result2 = Category.addTask(2,1)
 		    	result1 mustEqual 1 
 		    	result2 mustEqual 1
+
+		    	//Adding the same task to differents categories 
+				Category.newCategory("Videos","norman")
+				var sameTask1 = Category.addTask(1,1)
+				var sameTask2 = Category.addTask(1,2)
+				sameTask1 mustEqual 1 
+				sameTask2 mustEqual 1
+
+		    }
+		}
+
+		"modifying category of task" in{
+			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
+				Category.newCategory("Sports","norman")
+				Category.newCategory("Videos","norman")
+		    	Task.createWithUser("Football", "norman")
+		    	val result1 = Category.addTask(1,1)
+		    	result1 mustEqual 1 
+		    	var result2 = Category.modify(1,2)
+		    	result1 mustEqual 1
 		    }
 		}
 	}

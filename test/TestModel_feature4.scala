@@ -15,13 +15,7 @@ class ModelTaskF4 extends Specification {
 		    	val cat1= Category.newCategory("Sports","norman") //User that exists
 		    	val cat2= Category.newCategory("Videos","norman") //User that exists
 		    	cat1 mustEqual 1 
-		    	cat2 mustEqual 1 
-		    	/*cat1.id muestEqual 1
-		    	cat1.name must equalTo("Sports")
-		    	cat1.t_user must equalTo("norman")
-		    	cat2.id mustEqual 2
-		    	cat2.name must equalTo("Videos")
-		    	cat2.t_user must equalTo("norman")*/
+		    	cat2 mustEqual 1
 		    }
 		}
 		"getting categories of users" in {
@@ -39,8 +33,6 @@ class ModelTaskF4 extends Specification {
 
 		"adding tasks to category" in{
 			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-
-				//Adding task to category
 				Category.newCategory("Sports","norman")
 		    	Task.createWithUser("Football", "norman")
 		      	Task.createWithUser("Basketball", "norman")
@@ -49,8 +41,16 @@ class ModelTaskF4 extends Specification {
 		    	result1 mustEqual 1 
 		    	result2 mustEqual 1
 
-		    	//Adding the same task to differents categories 
+
+		    }
+		}
+
+		"adding same task to different categories" in{
+			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+
 				Category.newCategory("Videos","norman")
+				Category.newCategory("Sports","norman")
+				Task.createWithUser("Football", "norman")
 				var sameTask1 = Category.addTask(1,1)
 				var sameTask2 = Category.addTask(1,2)
 				sameTask1 mustEqual 1 
@@ -59,16 +59,13 @@ class ModelTaskF4 extends Specification {
 		    }
 		}
 
-		"modifying category of task" in{
+		"modifying task of category" in{
 			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
-
 				Category.newCategory("Sports","norman")
-				Category.newCategory("Videos","norman")
 		    	Task.createWithUser("Football", "norman")
-		    	val result1 = Category.addTask(1,1)
-		    	result1 mustEqual 1 
-		    	var result2 = Category.modify(1,2)
+		    	var result1 = Category.modify(1,"Baskteball")
 		    	result1 mustEqual 1
+
 		    }
 		}
 	}

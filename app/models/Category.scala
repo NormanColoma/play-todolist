@@ -27,6 +27,15 @@ object Category {
      result
    }
 
+   def addTask(id_task: Long, id_category:Long):Int = {
+     val result: Int= DB.withConnection { implicit c =>
+       SQL("insert into tcat (id_task,id_category) values ({id_task},{id_category})").on(
+         'id_task -> id_task, 'id_category -> id_category
+       ).executeUpdate()
+     }
+     result
+   }
+
    def getCategories(user:String):List[Category] =  DB.withConnection { implicit c =>
    	SQL("select * from category where user = {user}").on('user -> user).as(category *)
    }

@@ -4,7 +4,7 @@ import play.api._
 import play.api.mvc._
 import play.api.data._
 import play.api.data.Forms._
-import models.Task
+import models._
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import java.util.Date
@@ -114,6 +114,22 @@ object Application extends Controller {
         if(t_user != None){
           Task.createWithUser(label,user)
           Created((Json.toJson("Task: "+label+". Created by: "+user)))
+        }
+        else
+          NotFound("User "+user+" doesn't exist")
+      }
+    )
+  }
+
+  def newCategory(user: String) = Action {
+    implicit request =>
+    taskForm.bindFromRequest.fold(
+      errors => BadRequest(views.html.index(Task.all(), errors)),
+      label => {
+       val t_user = Task.existUser(user)
+        if(t_user != None){
+          Category.newCategory(label,user)
+          Created((Json.toJson("Category "+label+" was created successfully")))
         }
         else
           NotFound("User "+user+" doesn't exist")

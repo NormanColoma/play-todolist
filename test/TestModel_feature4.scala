@@ -24,5 +24,15 @@ class ModelTaskF4 extends Specification {
 		    	cat2.t_user must equalTo("norman")*/
 		    }
 		}
+		"getting categories of users" in {
+		    running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+		    	Category.newCategory("Sports","norman") //User that exists
+		    	Category.newCategory("Videos","norman") //User that exists
+		    	val categories = Category.getCategories("norman")
+		    	categories.length mustEqual 2 
+		    	categories(0).name must equalTo("Sports")
+		    	categories(1).name must equalTo("Videos")
+		    }
+		}
 	}
 }

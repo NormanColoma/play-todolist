@@ -79,5 +79,15 @@ class ModelTaskF4 extends Specification {
 
 		    }
 		}
-	}
+
+		"getting tasks from categories of users" in{
+			running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {
+				Category.newCategory("Sports","norman")
+				Task.createWithUser("Football", "norman")
+				Task.createWithUser("Baskteball", "norman")
+				Task.createWithUser("Tennis", "norman")
+				val list_task = Category.getTasks(1,"norman")
+
+		    }
+		}
 }

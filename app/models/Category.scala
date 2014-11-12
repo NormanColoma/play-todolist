@@ -18,6 +18,15 @@ object Category {
       }
    }
 
+    val task = {
+      get[Long]("id") ~ 
+      get[String]("label") ~
+      get[String]("t_user") ~
+      get[Option[Date]]("t_date") map {
+         case id~label~t_user~t_date => Task(id, label, t_user, t_date)
+      }
+   }
+
    def newCategory(name: String, user:String):Int = {
      val result: Int= DB.withConnection { implicit c =>
        SQL("insert into category (name,user) values ({name},{user})").on(

@@ -71,7 +71,7 @@ class ApplicationTaskF4 extends Specification {
 		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Sports"))
 		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
 		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
-		  		controllers.Application.addTask(1,1,"norman")(FakeRequest(POST, "/norman/category/Sports/1"))
+		  		controllers.Application.addTask(1,1,"norman")(FakeRequest(POST, "/norman/category/1/1"))
 		  		var result = controllers.Application.changeTask(1,1,"norman")(FakeRequest(POST, "/norman/category/1/modify/1").withFormUrlEncodedBody("label" -> "Tennis"))
 				status(result) must equalTo(CREATED)
 		        contentType(result) must beSome("application/json")
@@ -99,6 +99,24 @@ class ApplicationTaskF4 extends Specification {
 				status(result1) must equalTo(NOT_FOUND)
 		        contentType(result1) must beSome("text/plain")
 		       	contentAsString(result1) must contain("Category has not been found")
+		  	}
+		}
+
+		"getting tasks from some category of user" in {
+		  
+		  	running(FakeApplication(additionalConfiguration = inMemoryDatabase())) {		  		
+		  		controllers.Application.newCategory("norman")(FakeRequest(POST, "/norman/category").withFormUrlEncodedBody("label" -> "Sports"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Football"))
+		  		controllers.Application.newTaskUser("norman")(FakeRequest(POST, "/norman/tasks").withFormUrlEncodedBody("label" -> "Basket"))
+		  		controllers.Application.addTask(1,1,"norman")(FakeRequest(POST, "/norman/category/1/1"))
+		  		controllers.Application.addTask(2,1,"norman")(FakeRequest(POST, "/norman/category/1/1"))
+		  		var result = controllers.Application.newTaskUser("norman")(FakeRequest(GET, "/norman/1/tasks"))
+		  		status(result) must equalTo(OK)
+		        contentType(result) must beSome("application/json")
+		  		contentAsString(result) must contain("""[{"id":1,"label":"Football","t_user":"norman","""
+          +""""t_date":"None"},{"id":2,"label":"Basket","t_user":"norman","""
+          +""""t_date":"None"}]""")
+
 		  	}
 		}
 

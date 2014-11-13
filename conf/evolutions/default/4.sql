@@ -24,5 +24,6 @@ ALTER TABLE tcat ADD CONSTRAINT fk_tcat_user FOREIGN KEY(user) REFERENCES task_u
 
 # --- !Downs
 ALTER TABLE category DROP user; 
+ALTER TABLE tcat DROP user;
 DROP TABLE  IF EXISTS category;
 DROP TABLE  IF EXISTS tcat;

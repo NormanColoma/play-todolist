@@ -33,7 +33,7 @@ class ApplicationTaskF4 extends Specification {
 		  		val result = controllers.Application.getCategoriesByUser("norman")(FakeRequest(GET, "/norman/categories"))
 		        status(result) must equalTo(OK)
 		        contentType(result) must beSome("application/json")
-		       	contentAsString(result) must contain("""[{"id":1,"name":"Football","user":"norman"},{"id":2,"name":"Basketball","user":"norman"}]""")
+		       	contentAsString(result) must contain("""[{"id":1,"name":"Football","c_user":"norman"},{"id":2,"name":"Basketball","c_user":"norman"}]""")
 
 		       	//User that doesn't exist 
 		       	val result1 = controllers.Application.getCategoriesByUser("pepe")(FakeRequest(GET, "/pepe/categories"))

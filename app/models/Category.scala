@@ -5,7 +5,7 @@ import anorm._
 import anorm.SqlParser._
 import java.util.Date
 
-case class Category(id: Long, name: String, user:String)
+case class Category(id: Long, name: String, c_user:String)
 
 
 
@@ -13,7 +13,7 @@ object Category {
 	val category = {
       get[Long]("id") ~ 
       get[String]("name") ~
-      get[String]("user") map {
+      get[String]("c_user") map {
          case id~name~user=> Category(id, name, user)
       }
    }
@@ -27,26 +27,26 @@ object Category {
       }
    }
 
-   def newCategory(name: String, user:String):Int = {
+   def newCategory(name: String, c_user:String):Int = {
      val result: Int= DB.withConnection { implicit c =>
-       SQL("insert into category (name,user) values ({name},{user})").on(
-         'name -> name, 'user -> user
+       SQL("insert into category (name,c_user) values ({name},{c_user})").on(
+         'name -> name, 'c_user -> c_user
        ).executeUpdate()
      }
      result
    }
 
-   def addTask(id_task: Long, id_category:Long, user:String):Int = {
+   def addTask(id_task: Long, id_category:Long, tcat_user:String):Int = {
      val result: Int= DB.withConnection { implicit c =>
-       SQL("insert into tcat (id_task,id_category,user) values ({id_task},{id_category},{user})").on(
-         'id_task -> id_task, 'id_category -> id_category, 'user -> user
+       SQL("insert into tcat (id_task,id_category,tcat_user) values ({id_task},{id_category},{tcat_user})").on(
+         'id_task -> id_task, 'id_category -> id_category, 'tcat_user -> tcat_user
        ).executeUpdate()
      }
      result
    }
 
-   def getCategories(user:String):List[Category] =  DB.withConnection { implicit c =>
-   	SQL("select * from category where user = {user}").on('user -> user).as(category *)
+   def getCategories(c_user:String):List[Category] =  DB.withConnection { implicit c =>
+   	SQL("select * from category where c_user = {c_user}").on('c_user -> c_user).as(category *)
    }
 
 
@@ -56,8 +56,8 @@ object Category {
 
 
 
-   def getID(name:String, user:String): Option[Long] = DB.withConnection{ implicit c => 
-      SQL("select id from category where name = {name} and user = {user}").on('name -> name, 'user -> user).as(scalar[Long].singleOpt)
+   def getID(name:String, c_user:String): Option[Long] = DB.withConnection{ implicit c => 
+      SQL("select id from category where name = {name} and c_user = {c_user}").on('name -> name, 'c_user -> c_user).as(scalar[Long].singleOpt)
    }
 
 
@@ -70,9 +70,9 @@ object Category {
      result
    }
 
-   def getTasks(id_category:Long, user:String):List[Task] = DB.withConnection{ implicit c => 
-   	SQL("select * from task inner join tcat on id_task = id where id_category = {id_category} and user ={user}").on(
-   		'id_category -> id_category, 'user -> user).as(task *)
+   def getTasks(id_category:Long, tcat_user:String):List[Task] = DB.withConnection{ implicit c => 
+   	SQL("select * from task inner join tcat on id_task = id where id_category = {id_category} and tcat_user ={tcat_user}").on(
+   		'id_category -> id_category, 'tcat_user -> tcat_user).as(task *)
    }
 
 }

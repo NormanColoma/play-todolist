@@ -31,7 +31,7 @@ object Application extends Controller {
   implicit val categoryWrites: Writes[Category] = (
     (JsPath \ "id").write[Long] and
     (JsPath \ "name").write[String] and 
-    (JsPath \ "user").write[String]
+    (JsPath \ "c_user").write[String]
   )(unlift(Category.unapply))
 
   def index = Action {
